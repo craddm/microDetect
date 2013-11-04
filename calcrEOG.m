@@ -37,9 +37,7 @@ switch args.filt
         disp('Using Matched Filter.')
     case 2
         locutoff = 30/(EEG.srate/2);
-        %locutoff = (2*pi*30)/(EEG.srate);
         hicutoff = 100/(EEG.srate/2);
-        %locutoff = (2*pi*30)/(EEG.srate);
         [b,a] = butter(6,[locutoff hicutoff]);
         EEG.microS.REOGf=filtfilt(b,a,EEG.microS.REOGall(:));
         numedge = length(a);
@@ -50,10 +48,5 @@ switch args.filt
         numedge = 84/(1024/EEG.srate);
 end
 
-EEG.microS.REOGFne=EEG.microS.REOGf(round(numedge/2)+1:length(EEG.microS.REOGf)-round(numedge/2),:);  % remove edges
-%EEG.REOGfirsttrial=EEG.REOGf(round(numedge/2)+1:EEG.pnts-round(numedge/2),:); % debugging purposes only
-
-%calculate RMS error of REOG
+EEG.microS.REOGFne = EEG.microS.REOGf(round(numedge/2)+1:length(EEG.microS.REOGf)-round(numedge/2),:);  % remove edges
 EEG.microS.REOGrms = sqrt(mean(EEG.microS.REOGFne.^2));
-%EEG.REOGfirsttrialRMS = sqrt(mean(EEG.REOGfirsttrial.^2)); % debugging
-%purposes only
