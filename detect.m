@@ -2,9 +2,8 @@ function EEG = detect(EEG,args)
 
 %to add
 %------
-%allow for varying amount and indices of eyechannels
-%allow storage of saccade locations in EEG structure 
-%create additional function for plotting
+%
+%create separate function for plotting
 
 binsize = 20;
 sacs_new = [];
@@ -85,7 +84,6 @@ for trials=1:EEG.trials
     end
    
     REOGFne= REOGf(round(numedge/2)+1:length(REOGf)-round(numedge/2));  % remove edges
-    
     mpd=round(20/(1000/EEG.srate)); %minimum peak distance - in samples, 10 is 20ms at 512Hz
     REOGfzero=[zeros(mpd+1,1); REOGFne; zeros(mpd+1,1)]; %i need to zeropad it for the mpd=10 to work
     [pks,locs] = findpeaks(REOGfzero,'minpeakheight',args.thresh*EEG.microS.baseRMS,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.    
