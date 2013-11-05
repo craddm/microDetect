@@ -13,9 +13,9 @@ function EEG = eyeCorrs(EEG)
     figure
     REOGcorrs = abs(corr(ICacts,rEOG));
     [corrSort,index] = sort(REOGcorrs,'descend');
-    barColourMap(1:numComps,1:3) = repmat([0 0 1],[67 1]);
+    barColourMap(1:numComps,1:3) = repmat([0 0 1],[numComps 1]);
     barColourMap(index(1:3),1:3) = repmat([1 0 0],[3 1]);
-    handle = subplot(1,3,1)
+    handle = subplot(1,3,1);
     
     for iComps = 1:numComps
         h(iComps) = bar(iComps,REOGcorrs(iComps),'BarWidth',0.9);
@@ -24,7 +24,7 @@ function EEG = eyeCorrs(EEG)
     end  
     set(gca, 'XTickMode', 'Auto');
     axis([1 numComps 0 1])
-    
+    title(handle,'REOG')
     
     VEOGcorrs = abs(corr(ICacts,VEOG));
     HEOGcorrs = abs(corr(ICacts,HEOG));
