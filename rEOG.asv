@@ -1,0 +1,29 @@
+function EEG = rEOG(EEG,args)
+
+times = find(EEG.times >= args.window(1) & EEG.times <=args.window(2));
+
+EEG.REOGall=zeros(length(times),EEG.trials);
+
+for trials=1:EEG.trials
+    eyeChans = [];
+    for iEyeChans = 1:length(args.eyechans)
+        eyeChans(iEyeChans,:) = squeeze(EEG.data(args.eyechans(iEyeChans),times,trials));
+    end
+    HEOGL=squeeze(EEG.data(args.eyechans(1),times,trials));
+    HEOGR=squeeze(EEG.data(68,times,trials));
+    VEOGS=squeeze(EEG.data(65,times,trials));
+    VEOGI=squeeze(EEG.data(66,times,trials));
+     Pz=squeeze(EEG.data(31,times,trials));        
+     EEG.REOGtest(:,trials) = mean(eyeChans)-Pz;
+     EEG.REOGall(:,trials) = (HEOGL+HEOGR+VEOGS+VEOGI)/4 - Pz;
+end
+numedge = 84/(1024/EEG.srate);
+
+EEG.REOGf=filtSRP(EEG.REOGall(:),EEG.srate);
+EEG.REOGFne=EEG.REOGf(numedge/2+1:length(EEG.REOGf)-numedge/2,:);  % remove edges
+
+%calculate RMS error of REOG
+EEG.REOGrms = sqrt(mean(EEG.REOGFne.^2));
+
+clear HEOGL HEOGR VEOGS VEOGI Pz numedge
+
