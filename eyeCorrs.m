@@ -1,7 +1,14 @@
 % Function for checking correlations of ICA components with REOG/other chans
 % just basic test version at the moment, only usable with eye chans 65:68
 
-% Matt Craddock
+% Matt Craddock, 2013
+
+% to add
+% ------
+% error checking for presence of eye channels/bipolarized eye channels.
+% allow flexible correlation thresholds instead of taking top three
+% allow plotting of more than just the highest correlation IC
+
 function EEG = eyeCorrs(EEG)
     
     numComps = length(EEG.icaweights);
@@ -10,6 +17,7 @@ function EEG = eyeCorrs(EEG)
     VEOG = (EEG.data(65,:)-EEG.data(66,:))';%create bipolarized eye chans
     HEOG = (EEG.data(67,:)-EEG.data(68,:))';
     ICacts = ICacts(:,:)';
+    
     figure
     
     REOGcorrs = abs(corr(ICacts,rEOG));
@@ -19,7 +27,7 @@ function EEG = eyeCorrs(EEG)
     [corrSort,index] = sort(REOGcorrs,'descend');
     barColourMap(1:numComps,1:3) = repmat([0 0 1],[numComps 1]);
     barColourMap(index(1:3),1:3) = repmat([1 0 0],[3 1]);
-    handle = subplot(1,3,1);
+    handle = subplot(2,3,1);
     
     for iComps = 1:numComps
         h(iComps) = bar(iComps,REOGcorrs(iComps),'BarWidth',0.9);
@@ -29,13 +37,14 @@ function EEG = eyeCorrs(EEG)
     set(gca, 'XTickMode', 'Auto');
     axis([1 numComps 0 1])
     title(handle,'REOG')
-    
+    subplot(2,3,4);
+    pop_topoplot(EEG,0,index(1),'',0,'colorbar','off');
     
     [corrSort,index] = sort(VEOGcorrs,'descend');
     barColourMap(1:numComps,1:3) = repmat([0 0 1],[numComps 1]);
     barColourMap(index(1:3),1:3) = repmat([1 0 0],[3 1]);
     
-    handle = subplot(1,3,2);
+    handle = subplot(2,3,2);
     for iComps = 1:numComps
         h(iComps) = bar(iComps,VEOGcorrs(iComps),'BarWidth',0.9);
         set(h(iComps),'FaceColor',barColourMap(iComps,:))
@@ -45,12 +54,15 @@ function EEG = eyeCorrs(EEG)
     axis([1 numComps 0 1])
     title(handle,'VEOG')
     
+    subplot(2,3,5);
+    pop_topoplot(EEG,0,index(1),'',0,'colorbar','off');
+    
     
     [corrSort,index] = sort(HEOGcorrs,'descend');
     barColourMap(1:numComps,1:3) = repmat([0 0 1],[numComps 1]);
     barColourMap(index(1:3),1:3) = repmat([1 0 0],[3 1]);
     
-    handle = subplot(1,3,3);
+    handle = subplot(2,3,3);
     for iComps = 1:numComps
         h(iComps) = bar(iComps,HEOGcorrs(iComps),'BarWidth',0.9);
         set(h(iComps),'FaceColor',barColourMap(iComps,:))
@@ -59,5 +71,8 @@ function EEG = eyeCorrs(EEG)
     set(gca, 'XTickMode', 'Auto');
     axis([1 numComps 0 1])
     title(handle,'HEOG')
+    
+    subplot(2,3,6);
+    pop_topoplot(EEG,0,index(1),'',0,'colorbar','off');
     
 end
