@@ -14,13 +14,22 @@ if isfield(EEG.microS,'REOGall')
     EEG.microS.REOGallold = EEG.microS.REOGall;
 end
 
+if isfield(EEG.microS,'baseRMS')
+    EEG.microS = rmfield(EEG.microS,'baseRMS');
+    EEG.microS = rmfield(EEG.microS,'baseRMSfilt');
+end
+
 EEG.microS.REOGall=zeros(length(times),EEG.trials);
 
 % find Pz
+PzIndex = 0
 for iPzIndex = 1:length(EEG.chanlocs)
     if strcmpi(EEG.chanlocs(iPzIndex).labels,'Pz')
         PzIndex = iPzIndex;
     end
+end
+if PzIndex == 0
+    PzIndex = 31;
 end
 
 for trials=1:EEG.trials
