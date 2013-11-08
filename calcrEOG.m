@@ -68,3 +68,35 @@ end
 
 EEG.microS.REOGFne = EEG.microS.REOGf(round(numedge/2)+1:length(EEG.microS.REOGf)-round(numedge/2),:);  % remove edges
 EEG.microS.REOGrms = sqrt(mean(EEG.microS.REOGFne.^2));
+
+if isfield(args,'method')
+    switch args.method
+        case 2
+            EEG.microS.threshold = 'adaptive';
+            adaptThresh = 2;
+            mpd = 10;
+            EEG.microS.REOGstdMed = sqrt(sum((EEG.microS.REOGFne-median(EEG.microS.REOGFne)).^2)/(length(EEG.microS.REOGFne)-1));
+            dataSecs = length(EEG.microS.REOGFne)/EEG.srate;
+            approxMaxPeaks = 3*dataSecs;
+            getout = 0;
+            closeEnough = true;
+            while closeEnough
+                getout = getout+1;
+                [pks,locs] = findpeaks(EEG.microS.REOGFne,'minpeakheight',adaptThresh*EEG.microS.REOGstdMed,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.
+                if (length(pks)-approxMaxPeaks) > approxMaxPeaks *.1
+                    adaptThresh = adaptThresh * 1.25;
+                elseif (length(pks)-approxMaxPeaks) < approxMaxPeaks * -.1
+                    adaptThresh = adaptThresh * 0.75;
+                else
+                    closeEnough = false;
+                end
+                if getout == 50
+                    error('Not converging!')
+                end
+            end
+            EEG.microS.adaptThresh = adaptThresh;
+        otherwise
+            EEG.microS.REOGrms = sqrt(mean(EEG.microS.REOGFne.^2));
+            EEG.microS.threshold = 'fixed';
+    end
+end

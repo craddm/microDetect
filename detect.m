@@ -87,12 +87,22 @@ for trials=1:EEG.trials
             minDelay = round(min(filtDelay(30:100))); %finds the minimum grpdelay in the passband (in samples) (approximately in the middle). note that butterworth filters have a non-linear phase response, thus have different delays at different frequencies.
         case '1stDeriv'
             REOGf = diff(REOG');
+            numedge = 0;
     end
    
     REOGFne= REOGf(round(numedge/2)+1:length(REOGf)-round(numedge/2));  % remove edges
     mpd=round(20/(1000/EEG.srate)); %minimum peak distance - in samples, 10 is 20ms at 512Hz
     REOGfzero=[zeros(mpd+1,1); REOGFne; zeros(mpd+1,1)]; %i need to zeropad it for the mpd=10 to work
-    [pks,locs] = findpeaks(REOGfzero,'minpeakheight',args.thresh*EEG.microS.baseRMS,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.    
+    switch EEG.microS.threshold
+        case 'adaptive'
+            mpd = 10;
+            [pks,locs] = findpeaks(REOGfzero,'minpeakheight',EEG.microS.adaptThresh*EEG.microS.REOGstdMed,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.            
+            %run twice to find maxmia *and* minima
+            %REOGfzero = 1.01*max(REOGfzero) - REOGfzero;
+            %[pks,locs] = findpeaks(REOGfzero,'minpeakheight',EEG.microS.adaptThresh*EEG.microS.REOGstdMed,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.
+        otherwise
+            [pks,locs] = findpeaks(REOGfzero,'minpeakheight',args.thresh*EEG.microS.baseRMS,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.
+    end
     
     locs = locs(:); %these two lines are for compatibility  - locs is a row in Matlab <2010a, but a column in later versions
     locs = locs';   %so here i'm just forcing it to be a row.
