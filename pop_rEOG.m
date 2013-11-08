@@ -37,13 +37,15 @@ function [EEG com] = pop_rEOG(EEG,varargin)
     
     if nargin <3
         drawnow;
-        uigeom = {[1 0.75] [1 0.75] [1 0.75]};
+        uigeom = {[1 0.75] [1 0.75] [1 0.75] [1 0.75]};
         uilist = {{'Style' 'text' 'String' 'Eye channel indices (default = 65:68):'} ...
             {'Style' 'edit' 'String' '' 'Tag' 'eyechans'} ...
             {'Style' 'text' 'String' 'Time window (milliseconds; default = whole epoch):'} ...
             {'Style' 'edit' 'String' '' 'Tag' 'window'} ...
             {'Style' 'text' 'String' 'Filter type (default = matched template):'}...
             {'Style' 'popupmenu' 'String', 'Matched template|Butterworth|1st derivative' 'Tag' 'filt'}...
+            {'Style' 'text' 'String' 'Threshold method (default = fixed):'}...
+            {'Style' 'popupmenu' 'String', 'fixed|adaptive' 'Tag' 'method'}...
             };
         
         result = inputgui(uigeom, uilist, 'pophelp(''pop_rEOG'')', ' creating rEOG channel -- pop_rEOG()');
@@ -65,16 +67,20 @@ function [EEG com] = pop_rEOG(EEG,varargin)
         else
             args = [args {'filt'} {1}];
         end
+        if ~isempty(result{4})
+            args = [args {'method'} result{4}];
+        else
+            args = [args {'method'} {1}];
+        end
         args = struct(args{:});
     else
         p = inputParser;
-        p.addRequired('EEG');
         p.addParamValue('eyechans',[65:68],@isvector);
         p.addParamValue('window',[EEG.times(1) EEG.times(end)],@checkwin);
         p.addParamValue('filt',1,@checkfilt);
-        p.parse(EEG,varargin{:});
+        p.addParamValue('method','fixed');
+        p.parse(varargin{:});
         args = p.Results;
-        args = rmfield(args,'EEG');
     end
         
     %create rEOG
