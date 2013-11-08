@@ -1,6 +1,12 @@
 % Function for checking correlations of ICA components with REOG/other chans
 % just basic test version at the moment, only usable with eye chans 65:68
-
+%
+%Usage:
+%>>pop_eyeCorrs(EEG,'key1',value...)
+%
+%Inputs:
+% not yet implemented.
+%
 % Matt Craddock, 2013
 
 function [com] = pop_eyeCorrs(EEG,varargin)

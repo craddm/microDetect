@@ -1,3 +1,6 @@
+%Low-level rEOG calculation function. Use pop_calcrEOG()
+%
+%Matt Craddock, 2013
 function EEG = calcrEOG(EEG,args)
 
 times = find(EEG.times >= args.window(1) & EEG.times <=args.window(2));
@@ -25,8 +28,8 @@ for trials=1:EEG.trials
     for iEyeChans = 1:length(args.eyechans)
         eyeChans(iEyeChans,:) = squeeze(EEG.data(args.eyechans(iEyeChans),times,trials));
     end
-     Pz=squeeze(EEG.data(PzIndex,times,trials));        
-     EEG.microS.REOGall(:,trials) = mean(eyeChans)-Pz;
+    Pz=squeeze(EEG.data(PzIndex,times,trials));
+    EEG.microS.REOGall(:,trials) = mean(eyeChans)-Pz;
 end
 
 switch args.filt
@@ -43,6 +46,12 @@ switch args.filt
         numedge = length(a);
         EEG.microS.REOGfilt = 'butter';
         disp('Using Butterworth Filter.')
+    case 3
+        EEG.microS.REOGf = diff(EEG.microS.REOGall);
+        EEG.microS.REOGf = EEG.microS.REOGf(:);
+        EEG.microS.REOGfilt = '1stDeriv';
+        disp('Using first derivative.')
+        numedge = 0;
     otherwise
         EEG.microS.REOGf=filtSRP(EEG.microS.REOGall(:),EEG.srate);
         numedge = 84/(1024/EEG.srate);
