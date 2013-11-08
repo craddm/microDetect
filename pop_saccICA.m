@@ -1,4 +1,7 @@
-%This function combines multiple datasets
+%Combines and reorganizes multiple datasets in one of several ways and 
+%runs ICA as required.
+%
+%Matt Craddock, 2013
 function [EEGOUT com] = pop_saccICA(EEG,varargin)
     
     com = '';
@@ -13,7 +16,7 @@ function [EEGOUT com] = pop_saccICA(EEG,varargin)
     
     EEGOUT = EEG;
     
-    if nargin <2
+    if nargin <3
         drawnow;
         uigeom = {[1 0.75]}
         uilist = {{'Style' 'text' 'String' 'Datasets (default = current):'} ...

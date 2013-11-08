@@ -1,4 +1,6 @@
 %Plot detected eye movements.
+%
+%
 %Matt Craddock, 2013
 
 function plotMicros(EEG,args);

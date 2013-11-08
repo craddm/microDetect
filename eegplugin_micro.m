@@ -32,7 +32,7 @@ comrEOG = [trystrs.no_check '[EEG LASTCOM] = pop_rEOG(EEG);' catchstrs.store_and
 comDetect = [trystrs.no_check '[EEG LASTCOM] = pop_detect(EEG);' catchstrs.store_and_hist];
 comsaccICA = [trystrs.no_check '[EEG LASTCOM] = pop_saccICA(EEG);' catchstrs.new_and_hist];
 comICAtran = [trystrs.no_check '[EEG LASTCOM] = pop_ICAtran(EEG);' catchstrs.store_and_hist];
-comCorrs = [trystrs.no_check '[EEG LASTCOM] = pop_eyeCorrs(EEG);' catchstrs.store_and_hist];
+comCorrs = [trystrs.no_check '[LASTCOM] = pop_eyeCorrs(EEG);' catchstrs.store_and_hist];
 comPlotMS = [trystrs.no_check '[LASTCOM] = pop_plotMicros(EEG);' catchstrs.store_and_hist];
 
 %create menus
