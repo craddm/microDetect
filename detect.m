@@ -129,13 +129,15 @@ end
     EEG.microS.sacRate = EEG.microS.binnedSacs./EEG.trials.*(1000/binsize);%normalize to give mean saccade rate/s
     
     if args.plot == 1
-        if args.normRate == 1
+        plotMicros(EEG,args)
+        
+%         if args.normRate == 1
             %figure,bar(EEG.microS.times,EEG.microS.sacRate);
-            figure,bar(EEG.microS.binEdges,EEG.microS.sacRate,'histc');
-        else
+%             figure,bar(EEG.microS.binEdges,EEG.microS.sacRate,'histc');
+%         else
             %figure,bar(EEG.microS.times,EEG.microS.binnedSacs);
-            figure,bar(EEG.microS.binEdges,EEG.microS.binnedSacs,'histc');
-        end
-        axis tight
+%             figure,bar(EEG.microS.binEdges,EEG.microS.binnedSacs,'histc');
+%         end
+%         axis tight
     end
 end

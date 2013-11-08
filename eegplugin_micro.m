@@ -1,4 +1,7 @@
-%eegplugin_micro
+% eegplugin_micro
+% Detect and correct for microsaccades using eye channels without
+% concurrently recorded eye-tracking data
+
 function eegplugin_micro (fig, trystrs, catchstrs);
 
 % add folder to path
@@ -29,6 +32,8 @@ comrEOG = [trystrs.no_check '[EEG LASTCOM] = pop_rEOG(EEG);' catchstrs.store_and
 comDetect = [trystrs.no_check '[EEG LASTCOM] = pop_detect(EEG);' catchstrs.store_and_hist];
 comsaccICA = [trystrs.no_check '[EEG LASTCOM] = pop_saccICA(EEG);' catchstrs.new_and_hist];
 comICAtran = [trystrs.no_check '[EEG LASTCOM] = pop_ICAtran(EEG);' catchstrs.store_and_hist];
+comCorrs = [trystrs.no_check '[EEG LASTCOM] = pop_eyeCorrs(EEG);' catchstrs.store_and_hist];
+comPlotMS = [trystrs.no_check '[LASTCOM] = pop_plotMicros(EEG);' catchstrs.store_and_hist];
 
 %create menus
 %------------
@@ -37,11 +42,11 @@ uimenu(submenu,'Label','Calculate rEOG','CallBack',comrEOG,'Separator','on');
 uimenu(submenu,'Label','Detect microsaccades','CallBack',comDetect);
 uimenu(submenu,'Label','Run ICA for detection','CallBack',comsaccICA);
 uimenu(submenu,'Label','Transfer ICA to full dataset','CallBack',comICAtran);
+uimenu(submenu,'Label','Plot ICA component correlations with eye channels','CallBack',comCorrs);
+uimenu(submenu,'Label','Plot detected microsaccades','CallBack',comPlotMS);
 
 %to add
 %------
 %see indiv functions, but overall:
-%allow user to specify filtering method (filtSRP or butterworth)
-%allow user to plot previously detected microsaccades without redetection
 %allow user to add reference RMS to datasets
 %allow user to run functions on multiple datasets
