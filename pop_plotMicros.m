@@ -1,4 +1,13 @@
 %Plot detected eye movements.
+%
+%Usage:
+%>>pop_plotMicros(EEG,'key1',value,'key2',value...);
+%
+%Inputs:
+% EEG           - EEG data structure
+% normRate      - 1 = Plot peaks per second/saccade rate
+%                 0 = Plot saccade count per bin
+%Authors:
 %Matt Craddock, 2013
 
 function com = pop_plotMicros(EEG,varargin);

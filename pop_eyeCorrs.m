@@ -3,20 +3,23 @@
 
 % Matt Craddock, 2013
 
-function [EEGOUT com] = pop_eyeCorrs(EEG,varargin)
+function [com] = pop_eyeCorrs(EEG,varargin)
     com = '';
     if nargin <1 
         help pop_eyeCorrs;
         return;
     end
-   
+    
     if isempty(EEG.data)
         error('Cannot process empty dataset');
     end
     
-    EEGOUT = EEG;
+    p = inputParser;
+    p.addParamValue('eyechans',[65:68],@isvector);
+    p.parse(varargin{:});
+    args = p.Results;
     
-    EEGOUT = eyeCorrs(EEG);
+    eyeCorrs(EEG,args);
     % History string
     com = sprintf('%s = pop_eyeCorrs(%s', inputname(1), inputname(1));
     for c = fieldnames(args)'

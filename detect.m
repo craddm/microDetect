@@ -1,9 +1,6 @@
+%Low-level function for microsaccade detection, please use pop_detect()
+%Matt Craddock, 2013
 function EEG = detect(EEG,args)
-
-%to add
-%------
-%
-%create separate function for plotting
 
 binsize = 20;
 sacs_new = [];
@@ -33,8 +30,7 @@ for iPzIndex = 1:length(EEG.chanlocs)
     end
 end
 
-%check if there are already microsaccades recorded for this dataset, remove
-%existing sacs if required 
+%Remove existing saccade events
 
 % if args.addsacs == 1
      if sum(unique((strcmp({EEG.event(:).type},'sac')))) == 1
@@ -116,10 +112,9 @@ if args.addsacs == 1
 end
 
 
-%bin the data and plot for the participant
+    %Bin the data and plot for the participant
     %----------------------------------------
-    samplelength=1000/EEG.srate;
-    %time=-1000:samplelength:999;
+%    samplelength=1000/EEG.srate;
 
     xbin=args.window(1):binsize:args.window(2);
     
@@ -129,15 +124,6 @@ end
     EEG.microS.sacRate = EEG.microS.binnedSacs./EEG.trials.*(1000/binsize);%normalize to give mean saccade rate/s
     
     if args.plot == 1
-        plotMicros(EEG,args)
-        
-%         if args.normRate == 1
-            %figure,bar(EEG.microS.times,EEG.microS.sacRate);
-%             figure,bar(EEG.microS.binEdges,EEG.microS.sacRate,'histc');
-%         else
-            %figure,bar(EEG.microS.times,EEG.microS.binnedSacs);
-%             figure,bar(EEG.microS.binEdges,EEG.microS.binnedSacs,'histc');
-%         end
-%         axis tight
+        plotMicros(EEG,args)        
     end
 end
