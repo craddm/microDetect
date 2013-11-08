@@ -15,6 +15,7 @@
 %                        (http://hcnl.huji.ac.il/Leon/Lab/tools/filtSRP.m)
 %                  2 - Butterworth filter, 6th order, bandpass from 30-100
 %                        Hz (requires Signal Processing Toolbox)
+%                  3 - First derivative.
 %
 %Outputs:
 % EEGOUT           - EEGLAB data structure with additional rEOG channel
@@ -34,7 +35,7 @@ function [EEG com] = pop_rEOG(EEG,varargin)
         error('Cannot process empty dataset');
     end
     
-    if nargin <2
+    if nargin <3
         drawnow;
         uigeom = {[1 0.75] [1 0.75] [1 0.75]};
         uilist = {{'Style' 'text' 'String' 'Eye channel indices (default = 65:68):'} ...
@@ -42,7 +43,7 @@ function [EEG com] = pop_rEOG(EEG,varargin)
             {'Style' 'text' 'String' 'Time window (milliseconds; default = whole epoch):'} ...
             {'Style' 'edit' 'String' '' 'Tag' 'window'} ...
             {'Style' 'text' 'String' 'Filter type (default = matched template):'}...
-            {'Style' 'popupmenu' 'String', 'Matched template|Butterworth' 'Tag' 'filt'}...
+            {'Style' 'popupmenu' 'String', 'Matched template|Butterworth|1st derivative' 'Tag' 'filt'}...
             };
         
         result = inputgui(uigeom, uilist, 'pophelp(''pop_rEOG'')', ' creating rEOG channel -- pop_rEOG()');
@@ -105,9 +106,9 @@ end
 function check = checkfilt(x)
 check = false;
     if ~isvector(x)
-        error('Filter type should be [1] (matched) or [2] (butterworth).');
-    elseif x>2
-        error('Filter type should be [1] (matched) or [2] (butterworth).');
+        error('Filter type should be [1] (matched), [2] (butterworth), or [3] (1st derivative).');
+    elseif x>3
+        error('Filter type should be [1] (matched), [2] (butterworth) or [3] (1st derivative).');
     else
         check = true;
     end

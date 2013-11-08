@@ -1,4 +1,5 @@
 %Low-level function for microsaccade detection, please use pop_detect()
+%
 %Matt Craddock, 2013
 function EEG = detect(EEG,args)
 
@@ -21,13 +22,20 @@ switch EEG.microS.baseRMSfilt
         disp('Matched template used for detection')
     case 'butter'
         disp('Butterworth filter used for detection')
+    case '1st deriv'
+        disp('First derivative used for detection')
 end
 
 % find Pz
+PzIndex = 0;
 for iPzIndex = 1:length(EEG.chanlocs)
     if strcmpi(EEG.chanlocs(iPzIndex).labels,'Pz')
         PzIndex = iPzIndex;
     end
+end
+
+if PzIndex == 0
+    PzIndex = 31;
 end
 
 %Remove existing saccade events
@@ -77,6 +85,8 @@ for trials=1:EEG.trials
             numedge = length(a);
             filtDelay = grpdelay(b,a,EEG.srate/2); %get grpdelay for the filter
             minDelay = round(min(filtDelay(30:100))); %finds the minimum grpdelay in the passband (in samples) (approximately in the middle). note that butterworth filters have a non-linear phase response, thus have different delays at different frequencies.
+        case '1stDeriv'
+            REOGf = diff(REOG');
     end
    
     REOGFne= REOGf(round(numedge/2)+1:length(REOGf)-round(numedge/2));  % remove edges
@@ -114,7 +124,6 @@ end
 
     %Bin the data and plot for the participant
     %----------------------------------------
-%    samplelength=1000/EEG.srate;
 
     xbin=args.window(1):binsize:args.window(2);
     

@@ -43,6 +43,7 @@ function [EEGOUT com] = pop_detect(EEG,varargin)
     end
     
     EEGOUT = EEG;
+    
     if nargin <3
         drawnow;
         uigeom = {[1 0.5] [1 0.5] [1 0.5] [1 0.5] [1 1 1]};
@@ -89,26 +90,18 @@ function [EEGOUT com] = pop_detect(EEG,varargin)
         args = [args {'plot'} {(result{7})}];
         args = struct(args{:});
     else
-        %args = varargin;
         p = inputParser;
-        p.addRequired('EEG');
         p.addParamValue('eyechans',[65:68],@isvector);
         p.addParamValue('window',[EEG.times(1) EEG.times(end)],@checkwin);
         p.addParamValue('thresh',3,@checkthresh);
-        %p.addParamValue('addsacs',1,@checksacs);
         p.addParamValue('addsacs',1);
-        %p.addParamValue('normRate',1,@checknorm);
         p.addParamValue('normRate',1);
-%         p.addParamValue('plot',1,@checkplot);        
         p.addParamValue('plot',1);
         p.addParamValue('dataset',[evalin('base','CURRENTSET')],@checkdata);
-        p.parse(EEG,varargin{:});
+        p.parse(varargin{:});
         args = p.Results;
-        args = rmfield(args,'EEG');
     end
-    
-    %args = struct(args{:});
-    
+        
     EEGOUT = detect(EEG,args);   
     
     % History string
