@@ -1,0 +1,38 @@
+%Plot detected eye movements.
+%Matt Craddock, 2013
+
+function EEGOUT = pop_plotMicros(EEG,varargin);
+    com = '';
+    if nargin < 1
+        help pop_detect;
+        return;
+    end
+    
+    if isempty(EEG.data)
+        error('Cannot process empty dataset');
+    end
+    if ~isfield(EEG,'microS')
+        error('Run microsaccade detection first!');
+    end
+    
+    if nargin < 3
+        drawnow;
+        uigeom = { [1]};
+        uilist = {{'Style' 'checkbox','value',1,'string','Normalized saccade rate?','Tag','normRate'}} ;             
+            
+        result = inputgui(uigeom, uilist, 'pophelp(''pop_plotMicros'')', ' plotting microsaccades -- pop_plotMicros()');
+        args = {};
+        args = [args {'normRate'} {(result{1})}];
+        args = struct(args{:});
+    else
+        p = inputParser;
+        p.addRequired('EEG');
+        p.addParamValue('normRate',1);
+        p.parse(EEG,varargin{:})
+        args = p.Results;
+        args = rmfield(args,EEG)
+    end
+    
+    EEGOUT = plotMicros(EEG,args);
+
+end

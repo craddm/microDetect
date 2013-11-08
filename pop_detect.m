@@ -87,6 +87,7 @@ function [EEGOUT com] = pop_detect(EEG,varargin)
         args = [args {'addsacs'} {(result{5})}];
         args = [args {'normRate'} {(result{6})}];
         args = [args {'plot'} {(result{7})}];
+        args = struct(args{:});
     else
         %args = varargin;
         p = inputParser;
