@@ -1,5 +1,5 @@
-% Function for checking correlations of ICA components with REOG/other chans
-% just basic test version at the moment, only usable with eye chans 65:68
+% Low-level function for plotting ICA/eye channel correlations. Please call
+% pop_eyeCorrs.
 
 % Matt Craddock, 2013
 
