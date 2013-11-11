@@ -74,7 +74,6 @@ function [EEG com] = pop_rEOG(EEG,varargin)
             args = [args {'filt'} {1}];
         end
         args = [args {'method'} result{4}];
-        end
         args = struct(args{:});
     else
         p = inputParser;

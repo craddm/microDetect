@@ -7,6 +7,8 @@
 % EEG           - EEG data structure
 % normRate      - 1 = Plot peaks per second/saccade rate
 %                 0 = Plot saccade count per bin
+% ---to be implemented
+%   Allow (optional) labelling of axes
 %Authors:
 %Matt Craddock, 2013
 
