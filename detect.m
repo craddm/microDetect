@@ -98,8 +98,8 @@ for trials=1:EEG.trials
             mpd = 10;
             [pks,locs] = findpeaks(REOGfzero,'minpeakheight',EEG.microS.adaptThresh*EEG.microS.REOGstdMed,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.            
             %run twice to find maxmia *and* minima
-            %REOGfzero = 1.01*max(REOGfzero) - REOGfzero;
-            %[pks,locs] = findpeaks(REOGfzero,'minpeakheight',EEG.microS.adaptThresh*EEG.microS.REOGstdMed,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.
+            [minpks,minlocs] = findpeaks(-REOGfzero,'minpeakheight',EEG.microS.adaptThresh*EEG.microS.REOGstdMed,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.
+            
         otherwise
             [pks,locs] = findpeaks(REOGfzero,'minpeakheight',args.thresh*EEG.microS.baseRMS,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.
     end
@@ -116,6 +116,10 @@ for trials=1:EEG.trials
                 
     sacs_new = [sacs_new locs];       
     fullTrialLocs = times(locs);
+    
+     for i = 1:length(fullTrialLocs)
+virtChan(1,(fullTrialLocs(i)-8):(fullTrialLocs(i)+8),1) = EEG.data(1,(fullTrialLocs(i)-8):(fullTrialLocs(i)+8),1);
+end
     if args.addsacs == 1
         for iLocs = 1:length(locs)
             EEG.event(end+1).type = 'sac';
