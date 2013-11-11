@@ -117,8 +117,8 @@ for trials=1:EEG.trials
     fullTrialLocs = times(locs);
     
      for i = 1:length(fullTrialLocs)
-virtChan(1,(fullTrialLocs(i)-8):(fullTrialLocs(i)+8),1) = EEG.data(1,(fullTrialLocs(i)-8):(fullTrialLocs(i)+8),1);
-end
+         virtChan(1,(fullTrialLocs(i)-8):(fullTrialLocs(i)+8),1) = EEG.data(1,(fullTrialLocs(i)-8):(fullTrialLocs(i)+8),1);
+     end
     if args.addsacs == 1
         for iLocs = 1:length(locs)
             EEG.event(end+1).type = 'sac';
