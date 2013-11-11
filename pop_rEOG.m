@@ -1,6 +1,7 @@
 %Creates the radial electrooculogram (rEOG) used to define the threshold
 %for detection of miniature eye movements from EEG eye channels. Returns
-%both the rEOG and the RMS of the rEOG. 
+%both the rEOG and the RMS of the rEOG, or the median based standard
+%deviation and an adaptively determined thresholding constant.
 %
 %Usage:
 %>>[EEGOUT] = pop_rEOG(EEG,'key1',value,'key2',value...)
