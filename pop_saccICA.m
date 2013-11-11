@@ -2,6 +2,7 @@
 %runs ICA as required.
 %
 %Matt Craddock, 2013
+
 function [EEGOUT com] = pop_saccICA(EEG,varargin)
     
     com = '';
@@ -18,12 +19,13 @@ function [EEGOUT com] = pop_saccICA(EEG,varargin)
     
     if nargin <3
         drawnow;
-        uigeom = {[1 0.75]}
+        uigeom = {[1 0.75] [1 0.75]}
         uilist = {{'Style' 'text' 'String' 'Datasets (default = current):'} ...
                   {'Style' 'edit' 'String' '' 'Tag' 'datasets'} ...
+                  {'Style' 'popupmenu' 'String' 'sacconly|addsaccs' 'Tag' 'method'} ...
                   };
             
-        result = inputgui(uigeom, uilist, 'pophelp(''pop_saccICA'')', ' creating saccICA channel -- pop_saccICA()');
+        result = inputgui(uigeom, uilist, 'pophelp(''pop_saccICA'')', ' running ICA -- pop_saccICA()');
         if isempty(result), return; end
 
         args = {};
@@ -31,7 +33,8 @@ function [EEGOUT com] = pop_saccICA(EEG,varargin)
             args = [args {'datasets'} {str2num(result{1})}];
         else
             args = [args {'datasets'} {evalin('base','CURRENTSET')} ];
-        end    
+        end
+        args = [args {'method'} result{2}];
     else
         args = varargin;
     end
