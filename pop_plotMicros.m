@@ -35,17 +35,15 @@ function com = pop_plotMicros(EEG,varargin);
         args = struct(args{:});
     else
         p = inputParser;
-        p.addRequired('EEG');
         p.addParamValue('normRate',1);
-        p.parse(EEG,varargin{:})
+        p.parse(varargin{:})
         args = p.Results;
-        args = rmfield(args,'EEG');
     end
     
     plotMicros(EEG,args);
     
     % History string
-    com = sprintf('pop_plotMicros(%s', inputname(1), inputname(1));
+    com = sprintf('pop_plotMicros(%s', inputname(1));
     for c = fieldnames(args)'
         if ischar(args.(c{:}))
             com = [com sprintf(', ''%s'', ''%s''', c{:}, args.(c{:}))];
