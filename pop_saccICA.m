@@ -1,5 +1,17 @@
 %Combines and reorganizes multiple datasets in one of several ways and 
-%runs ICA as required.
+%runs ICA as required. This is a placeholder which is not yet fully
+%implemented.
+%
+% Inputs:
+% EEG       - EEG data
+% datasets  - EEG datasets to combine (default = current)
+
+%---not yet implemented:
+%   method  - sacconly - run ICA on peri-saccade epochs only (+-100 ms of
+%   each detected saccade
+%   -addsaccs - run ICA on full epochs with peri-saccade epochs added to
+%   end of dataset
+%   -virtual channels - run ICA with virtual channels added to the dataset
 %
 %Matt Craddock, 2013
 
@@ -35,10 +47,13 @@ function [EEGOUT com] = pop_saccICA(EEG,varargin)
             args = [args {'datasets'} {evalin('base','CURRENTSET')} ];
         end
         args = [args {'method'} result{2}];
+        args = struct(args{:});
     else
-        args = varargin;
+        p = inputParser;
+        p.addParamValue('method','sacconly')
+        p.parse(varargin{:});
+        args = p.results;
     end
-    args = struct(args{:});
     if length(args.datasets) >1
         %to add - check all datasets actually have saccades
 %         for iSaccCheck = 1:length(args.datasets)

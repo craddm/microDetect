@@ -1,4 +1,4 @@
-%Plot detected eye movements.
+%Plot detected eye movements. Must be run after microsaccade detection.
 %
 %Usage:
 %>>pop_plotMicros(EEG,'key1',value,'key2',value...);
