@@ -28,6 +28,10 @@ function [com] = pop_eyeCorrs(EEG,varargin)
         error('Cannot process empty dataset');
     end
     
+    if isempty(EEG.icaweights)
+        error('this dataset has no ICA decomposition');
+    end
+    
     if nargin <3
         drawnow;
         uigeom = { [1 0.75]};
