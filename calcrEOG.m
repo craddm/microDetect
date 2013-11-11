@@ -1,6 +1,7 @@
-%Low-level rEOG calculation function. Use pop_calcrEOG()
+%Low-level rEOG calculation function. Use pop_rEOG().
 %
 %Matt Craddock, 2013
+
 function EEG = calcrEOG(EEG,args)
 
 times = find(EEG.times >= args.window(1) & EEG.times <=args.window(2));
@@ -21,8 +22,11 @@ end
 
 EEG.microS.REOGall=zeros(length(times),EEG.trials);
 
-% find Pz
-PzIndex = 0
+% Find Pz, if it's there - if not, set to channel 31. Need to modify
+% this, because it will cause problems when channel locs don't use 10-20
+% names/system is not BioSemi 64.
+
+PzIndex = 0;
 for iPzIndex = 1:length(EEG.chanlocs)
     if strcmpi(EEG.chanlocs(iPzIndex).labels,'Pz')
         PzIndex = iPzIndex;
@@ -74,7 +78,7 @@ if isfield(args,'method')
         case 2
             EEG.microS.threshold = 'adaptive';
             adaptThresh = 2;
-            mpd = 10;
+            mpd=round(20/(1000/EEG.srate)); %set minimum peak distance to ~20ms
             EEG.microS.REOGstdMed = sqrt(sum((EEG.microS.REOGFne-median(EEG.microS.REOGFne)).^2)/(length(EEG.microS.REOGFne)-1));
             dataSecs = length(EEG.microS.REOGFne)/EEG.srate;
             approxMaxPeaks = 3*dataSecs;
@@ -84,9 +88,9 @@ if isfield(args,'method')
                 getout = getout+1;
                 [pks,locs] = findpeaks(EEG.microS.REOGFne,'minpeakheight',adaptThresh*EEG.microS.REOGstdMed,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.
                 if (length(pks)-approxMaxPeaks) > approxMaxPeaks *.1
-                    adaptThresh = adaptThresh * 1.25;
+                    adaptThresh = adaptThresh * 1.2;
                 elseif (length(pks)-approxMaxPeaks) < approxMaxPeaks * -.1
-                    adaptThresh = adaptThresh * 0.75;
+                    adaptThresh = adaptThresh * 0.8;
                 else
                     closeEnough = false;
                 end

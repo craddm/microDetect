@@ -98,8 +98,7 @@ for trials=1:EEG.trials
             mpd = 10;
             [pks,locs] = findpeaks(REOGfzero,'minpeakheight',EEG.microS.adaptThresh*EEG.microS.REOGstdMed,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.            
             %run twice to find maxmia *and* minima
-            [minpks,minlocs] = findpeaks(-REOGfzero,'minpeakheight',EEG.microS.adaptThresh*EEG.microS.REOGstdMed,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.
-            
+            [minpks,minlocs] = findpeaks(-REOGfzero,'minpeakheight',EEG.microS.adaptThresh*EEG.microS.REOGstdMed,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.            
         otherwise
             [pks,locs] = findpeaks(REOGfzero,'minpeakheight',args.thresh*EEG.microS.baseRMS,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.
     end

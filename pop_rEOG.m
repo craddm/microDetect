@@ -16,6 +16,11 @@
 %                  2 - Butterworth filter, 6th order, bandpass from 30-100
 %                        Hz (requires Signal Processing Toolbox)
 %                  3 - First derivative.
+% method        - Determine the RMS of rEOG for subsequent use with a fixed
+%                 threshold, or the median-based standard deviation and 
+%                 adaptively determine a thresholding constant.
+%                  1 - fixed (determine RMS only)
+%                  2 - adaptive (threshold + median-based stdev)
 %
 %Outputs:
 % EEGOUT           - EEGLAB data structure with additional rEOG channel
