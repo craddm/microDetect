@@ -73,10 +73,7 @@ function [EEG com] = pop_rEOG(EEG,varargin)
         else
             args = [args {'filt'} {1}];
         end
-        if ~isempty(result{4})
-            args = [args {'method'} result{4}];
-        else
-            args = [args {'method'} {1}];
+        args = [args {'method'} result{4}];
         end
         args = struct(args{:});
     else
