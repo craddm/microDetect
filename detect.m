@@ -69,9 +69,7 @@ for trials=1:EEG.trials
     end
     
     Pz = squeeze(EEG.data(PzIndex,times,trials));
-
-    REOG = mean(eyeChans)-Pz;
-    REOG = double(REOG);
+    REOG = double(mean(eyeChans)-Pz);
     
     switch EEG.microS.baseRMSfilt
         case 'matched'
@@ -87,6 +85,7 @@ for trials=1:EEG.trials
             minDelay = round(min(filtDelay(30:100))); %finds the minimum grpdelay in the passband (in samples) (approximately in the middle). note that butterworth filters have a non-linear phase response, thus have different delays at different frequencies.
         case '1stDeriv'
             REOGf = diff(REOG');
+            %REOGf = diff(REOG(1:2:end)')./(2000/EEG.srate); %calculate centred difference            
             numedge = 0;
     end
    
@@ -116,9 +115,9 @@ for trials=1:EEG.trials
     sacs_new = [sacs_new locs];       
     fullTrialLocs = times(locs);
     
-     for i = 1:length(fullTrialLocs)
-         virtChan(1,(fullTrialLocs(i)-8):(fullTrialLocs(i)+8),1) = EEG.data(1,(fullTrialLocs(i)-8):(fullTrialLocs(i)+8),1);
-     end
+     %for i = 1:length(fullTrialLocs)
+     %    virtChan(1,(fullTrialLocs(i)-8):(fullTrialLocs(i)+8),1) = EEG.data(1,(fullTrialLocs(i)-8):(fullTrialLocs(i)+8),1);
+     %end
     if args.addsacs == 1
         for iLocs = 1:length(locs)
             EEG.event(end+1).type = 'sac';

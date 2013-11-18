@@ -60,7 +60,8 @@ switch args.filt
         EEG.microS.REOGfilt = 'butter';
         disp('Using Butterworth Filter.')
     case 3
-        EEG.microS.REOGf = diff(EEG.microS.REOGall);
+        EEG.microS.REOGf = diff(EEG.microS.REOGall); 
+        %EEG.microS.REOGf = EEG.microS.REOGf./(2000/EEG.srate);%using centred differences, so need this to be 2*sample length - temporal distance is always the same
         EEG.microS.REOGf = EEG.microS.REOGf(:);
         EEG.microS.REOGfilt = '1stDeriv';
         disp('Using first derivative.')
