@@ -1,5 +1,8 @@
 %Low-level function for microsaccade detection, please use pop_detect()
 %
+%1.01 fixed clash with Cleanline eeglab plugin, which has a custom findpeaks
+%function. 03/09/2015
+%
 %Matt Craddock, 2013
 function EEG = detect(EEG,args)
 
@@ -92,6 +95,15 @@ for trials=1:EEG.trials
     REOGFne= REOGf(round(numedge/2)+1:length(REOGf)-round(numedge/2));  % remove edges
     mpd=round(20/(1000/EEG.srate)); %minimum peak distance - in samples, 10 is 20ms at 512Hz
     REOGfzero=[zeros(mpd+1,1); REOGFne; zeros(mpd+1,1)]; %i need to zeropad it for the mpd=10 to work
+    
+    %Cleanline, a commonly used plug-in for EEGlab, has a custom findpeaks
+    %function which conflicts with findpeaks from the Matlab Signal
+    %Processing Toolbox. Switch to the signal processing toolbox folder so
+    %Matlab uses that one.
+    currentDir = pwd; 
+    SPTDir = toolboxdir('signal');
+    cd([SPTDir '/signal/']);
+        
     switch EEG.microS.threshold
         case 'adaptive'
             mpd = 10;
@@ -101,6 +113,8 @@ for trials=1:EEG.trials
         otherwise
             [pks,locs] = findpeaks(REOGfzero,'minpeakheight',args.thresh*EEG.microS.baseRMS,'minpeakdistance',mpd); %change REOGrms multiplier to change sensitivity.
     end
+    
+    cd(currentDir); %switch back to original directory
     
     locs = locs(:); %these two lines are for compatibility  - locs is a row in Matlab <2010a, but a column in later versions
     locs = locs';   %so here i'm just forcing it to be a row.
