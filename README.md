@@ -8,4 +8,8 @@ It has been tested on version 11 of eeglab, and on Matlab versions 2009a and 201
 
 Simply add the files to a folder in your EEGLAB plugins folder. The functions are available under the Tools menu in EEGLAB, and can also be used from the command line or scripting.
 
-Matt Craddock, 2013
+UPDATE: Published an article http://onlinelibrary.wiley.com/doi/10.1111/psyp.12593/abstract "Accounting for microsaccadic artifacts in the EEG using independent component analysis and beamforming" with some further information.
+
+# I have found some issues running the plug-in on recent versions of EEGLAB which are due to changes made by the EEGLAB creators; I'm trying to come up with workarounds. (Oct 2016).
+
+Matt Craddock, 2016
